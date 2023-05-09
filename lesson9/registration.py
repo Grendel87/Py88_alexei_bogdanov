@@ -1,0 +1,33 @@
+from user import User
+from database import Database
+
+
+class RegistrationSystem:
+
+    @staticmethod
+    def register():
+        new_user = User()
+        while True:
+            login = input("Enter your login for registration: ")
+            if new_user.update_login(login):
+                if not Database.check_existing_login(new_user.login):
+                    break
+                else:
+                    print(f"Login '{new_user.login}' is already taken!")
+        while True:
+            password = input("Enter your password for registration: ")
+            if new_user.update_password(password):
+                break
+        while True:
+            repeated_password = input("Repeat your password: ")
+            if repeated_password == password:
+                break
+            else:
+                print("Entered passwords do not match.")
+        while True:
+            age = input("Enter your age for registration: ")
+            if new_user.update_age(age):
+                break
+        Database.users.append(new_user.get_as_dict())
+        Database.dump()
+        print(f"{new_user.login}, your registration is over.")
